@@ -1,5 +1,5 @@
 /**
- * spaint: PickerFactory.cpp
+ * itmx: PickerFactory.cpp
  * Copyright (c) Torr Vision Group, University of Oxford, 2016. All rights reserved.
  */
 
@@ -12,15 +12,15 @@ using namespace ITMLib;
 #include "picking/cuda/Picker_CUDA.h"
 #endif
 
-namespace spaint {
+namespace itmx {
 
 //#################### PUBLIC STATIC MEMBER FUNCTIONS ####################
 
-Picker_CPtr PickerFactory::make_picker(ITMLibSettings::DeviceType deviceType)
+Picker_CPtr PickerFactory::make_picker(DeviceType deviceType)
 {
   Picker_CPtr picker;
 
-  if(deviceType == ITMLibSettings::DEVICE_CUDA)
+  if(deviceType == DEVICE_CUDA)
   {
 #ifdef WITH_CUDA
     picker.reset(new Picker_CUDA);
