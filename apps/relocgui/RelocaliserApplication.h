@@ -27,6 +27,20 @@
 
 #include <tvgutil/filesystem/SequentialPathGenerator.h>
 
+extern char g_train_path[200];
+extern char g_test_path[200];
+extern std::string g_model_name;
+extern std::string model_save_path;
+extern std::string g_phase;
+extern int g_train_beg;
+extern int g_train_end;
+extern int g_train_step;
+extern int g_test_beg;
+extern int g_test_end;
+extern int g_test_step;
+extern int g_train_id;
+extern int g_test_id;
+
 namespace relocgui {
 
 /**
@@ -64,6 +78,7 @@ private:
 
     /** Colour image in uint8_t RGBA format. */
     cv::Mat rgbImage;
+    uint32_t idx;
   };
 
   //#################### TYPEDEFS ####################
@@ -95,6 +110,30 @@ public:
    */
   void run();
 
+  /**
+   * \brief Train the relocalizer, and save the trained model
+   * 
+   */
+  void train();
+
+  /**
+   * \brief Test the relocalizer
+   * 
+   */
+  void test(); 
+
+  /**
+   * \brief Test the relocalizer for rl procedure
+   * 
+   */
+  void test4rl();
+
+  /**
+   * \brief Test the train path to get the valid point cloud
+   * 
+   */
+  void test4pcd();
+
   //#################### PRIVATE MEMBER FUNCTIONS ####################
 private:
   /**
@@ -107,6 +146,10 @@ private:
    * examples in the folder.
    */
   boost::optional<RelocalisationExample> read_example(const SequentialPathGenerator_Ptr &pathGenerator) const;
+
+  boost::optional<RelocalisationExample> rel_read_example(bool is_trainning_data) const; 
+
+  boost::optional<RelocalisationExample> file_read_example(std::string file_name) const; 
 
   /**
    * \brief Convert the images contained in the example to ORUtil's image format and copy them on the GPU.
@@ -125,6 +168,7 @@ private:
 
   //#################### PRIVATE MEMBER VARIABLES ####################
 private:
+
   /** The path to a camera calibration file. */
   boost::filesystem::path m_calibrationFilePath;
 

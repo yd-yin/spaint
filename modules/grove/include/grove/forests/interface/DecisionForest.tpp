@@ -260,11 +260,13 @@ void DecisionForest<DescriptorType,TreeCount>::load_structure_from_file(const st
     m_nbTotalLeaves += nbLeaves;
   }
 
+/*
   std::cout << "Loading a forest with " << nbTrees << " trees.\n";
   for(uint32_t i = 0; i < nbTrees; ++i)
   {
     std::cout << "\tTree " << i << ": " << m_nbNodesPerTree[i] << " nodes and " << m_nbLeavesPerTree[i] << " leaves.\n";
   }
+  // */
 
   // Allocate and clear the node image.
   const orx::MemoryBlockFactory& mbf = orx::MemoryBlockFactory::instance();

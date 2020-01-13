@@ -44,8 +44,15 @@ PreemptiveRansac::PreemptiveRansac(const SettingsContainer_CPtr& settings, const
   m_checkMinDistanceBetweenSampledModes = m_settings->get_first_value<bool>(settingsNamespace + "checkMinDistanceBetweenSampledModes", true);                   // Whether or not to force sampled modes to have a minimum distance between them.
   m_checkRigidTransformationConstraint = m_settings->get_first_value<bool>(settingsNamespace + "checkRigidTransformationConstraint", true);                     // Setting this to false speeds things up a lot, at the expense of quality.
   m_maxCandidateGenerationIterations = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxCandidateGenerationIterations", 6000);                     // The maximum number of times we sample three pixel-mode pairs in the attempt to generate a pose candidate.
-  m_maxPoseCandidates = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidates", 1024);                                                   // The number of initial pose candidates.
-  m_maxPoseCandidatesAfterCull = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidatesAfterCull", 64);                                   // Aggressively cull hypotheses to this number.
+  
+
+  // raw 
+  //m_maxPoseCandidates = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidates", 1024);                                                   // The number of initial pose candidates.
+  //m_maxPoseCandidatesAfterCull = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidatesAfterCull", 64);                                   // Aggressively cull hypotheses to this number.
+  m_maxPoseCandidates = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidates", 1024);
+  m_maxPoseCandidatesAfterCull = m_settings->get_first_value<uint32_t>(settingsNamespace + "maxPoseCandidatesAfterCull", 64); 
+
+
   m_maxTranslationErrorForCorrectPose = m_settings->get_first_value<float>(settingsNamespace + "maxTranslationErrorForCorrectPose", 0.05f);                     // In m.
   m_minSquaredDistanceBetweenSampledModes = m_settings->get_first_value<float>(settingsNamespace + "minSquaredDistanceBetweenSampledModes", 0.3f * 0.3f);       // In m.
 
@@ -146,6 +153,7 @@ boost::optional<PoseCandidate> PreemptiveRansac::estimate_pose(const Keypoint3DC
         elements of the block. By changing the number to the actual number of elements to move we can gain a slight
         speed-up of the system.
   */
+
 
   m_timerTotal.start_sync();
 

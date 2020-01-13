@@ -7,7 +7,7 @@
 #define H_GROVE_DECISIONFOREST_SHARED
 
 #include <ORUtils/Vector.h>
-
+#include <stdio.h> 
 namespace grove {
 
 /**
@@ -30,7 +30,8 @@ inline void compute_leaf_indices(int x, int y, const DescriptorType *descriptors
   const DescriptorType& currentDescriptor = descriptors[rasterIdx];
 
   // For each tree in the forest:
-  for(int treeIdx = 0; treeIdx < TreeCount; ++treeIdx)
+  
+  for(int treeIdx = 0; treeIdx < TreeCount; ++treeIdx) // raw
   {
     // Start from the root node and iteratively walk down the tree until a leaf is reached.
     uint32_t currentNodeIdx = 0;

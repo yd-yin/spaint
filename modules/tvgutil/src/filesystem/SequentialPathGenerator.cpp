@@ -37,4 +37,9 @@ boost::filesystem::path SequentialPathGenerator::make_path(const std::string& pa
   return m_baseDir / (boost::format(pattern) % m_index).str();
 }
 
+boost::filesystem::path SequentialPathGenerator::make_path(const std::string& pattern, uint32_t idx, uint32_t i) const
+{
+  return m_baseDir / (boost::format(pattern) % idx % i).str();
+}
+
 }

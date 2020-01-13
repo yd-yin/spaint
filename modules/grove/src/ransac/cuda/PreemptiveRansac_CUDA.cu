@@ -302,12 +302,11 @@ void PreemptiveRansac_CUDA::update_candidate_poses()
 {
   // Copy the pose candidates across to the CPU so that they can be optimised.
   m_poseCandidates->UpdateHostFromDevice();
-
   // Call the base class implementation to optimise the poses.
   PreemptiveRansac::update_candidate_poses();
-
   // Copy the optimised pose candidates back across to the GPU.
   m_poseCandidates->UpdateDeviceFromHost();
+  //*/
 }
 
 //#################### PRIVATE MEMBER FUNCTIONS ####################

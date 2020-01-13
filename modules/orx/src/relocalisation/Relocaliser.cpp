@@ -29,6 +29,12 @@ ORUChar4Image_CPtr Relocaliser::get_visualisation_image(const std::string& key) 
   return ORUChar4Image_CPtr();
 }
 
+void Relocaliser::test4pcd(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, const ORUtils::SE3Pose& cameraPose, CorrectPointCloud& pointCloud)
+{
+  std::cout << "nothing" << std::endl;
+  // No-op by default
+}
+
 void Relocaliser::update()
 {
   // No-op by default

@@ -45,6 +45,7 @@ inline float compute_energy_sum_for_inlier_subset(const Matrix4f& candidatePose,
 {
   float energySum = 0.0f;
 
+
   // For each "inlier" keypoint in the strided subset:
   for(uint32_t inlierIdx = inlierStartIdx; inlierIdx < nbInliers; inlierIdx += inlierStep)
   {
@@ -79,6 +80,7 @@ inline float compute_energy_sum_for_inlier_subset(const Matrix4f& candidatePose,
     // If this isn't the case for some reason, defensively throw.
     if(pred.elts[argmax].nbInliers == 0)
     {
+// comment raw code out.
 #if defined(__CUDACC__) && defined(__CUDA_ARCH__)
       printf("mode has no inliers\n");
       asm("trap;");
@@ -150,6 +152,11 @@ inline bool generate_pose_candidate(const Keypoint3DColour *keypointsData, const
   int correspondencesFound = 0;
   int selectedRasterIndices[PoseCandidate::KABSCH_CORRESPONDENCES_NEEDED];
   int selectedModeIndices[PoseCandidate::KABSCH_CORRESPONDENCES_NEEDED];
+
+
+
+
+
 
   // Try to generate correspondences for Kabsch, iterating in total at most maxCandidateGenerationIterations times.
   for(uint32_t i = 0; correspondencesFound != PoseCandidate::KABSCH_CORRESPONDENCES_NEEDED && i < maxCandidateGenerationIterations; ++i)

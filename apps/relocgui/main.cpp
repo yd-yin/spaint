@@ -14,6 +14,22 @@ using namespace tvgutil;
 
 namespace po = boost::program_options;
 
+// global params
+char g_train_path[200] = "";
+char g_test_path[200] = "";
+std::string g_model_name;
+std::string model_save_path;
+std::string g_phase;
+int g_train_beg = 0; // 1 for nips ddl.
+int g_train_end = 9999;
+int g_train_step = 1;
+int g_test_beg = 0; // 1 for nips ddl.
+int g_test_end = 9999;
+int g_test_step = 1;
+int g_train_id = g_train_beg;
+int g_test_id = g_test_beg;
+// global params
+
 //#################### TYPES ####################
 
 /**
@@ -25,6 +41,9 @@ struct CommandLineArguments
   std::string experimentTag;
   std::string testFolder;
   std::string trainFolder;
+  std::string modelName;
+  std::string phase;
+  std::string model_path;
 };
 
 //#################### FUNCTIONS ####################
@@ -71,8 +90,11 @@ bool parse_command_line(int argc, char *argv[], CommandLineArguments &args, cons
   po::options_description diskSequenceOptions("Disk sequence options");
   diskSequenceOptions.add_options()
       ("calib,c", po::value<std::string>(&args.calibrationFilename)->required(), "calibration filename")
-      ("test", po::value<std::string>(&args.testFolder)->required(), "path to the folder containing the training sequence")
-      ("train", po::value<std::string>(&args.trainFolder)->required(), "path to the folder containing the training sequence")
+      ("test", po::value<std::string>(&args.testFolder), "path to the folder containing the training sequence")
+      ("train", po::value<std::string>(&args.trainFolder), "path to the folder containing the training sequence")
+      ("model_path", po::value<std::string>(&args.model_path)->required(), "model path for training and testing")
+      ("model", po::value<std::string>(&args.modelName)->required(), "model name for training and testing")
+      ("phase", po::value<std::string>(&args.phase)->required(), "phase: train, test, test4pcd or test4rl")
       ;
 
   po::options_description options;
@@ -107,8 +129,11 @@ bool parse_command_line(int argc, char *argv[], CommandLineArguments &args, cons
 
   po::notify(vm);
 
-  std::cout << "Global settings:\n" << *settings << '\n';
-
+  if(!args.phase.compare("test4rl") == 0)
+  {
+    std::cout << "Global settings:\n" << *settings << '\n';
+  }
+  
   // If the user specifies the --help flag, print a help message.
   if(vm.count("help"))
   {
@@ -131,8 +156,45 @@ int main(int argc, char *argv[]) try
     return 0;
   }
 
+  
+  // specify the number of output poses
+  if(!args.phase.compare("test4pcd") == 0)
+  {
+    settings -> add_value("ScoreRelocaliser.maxRelocalisationsToOutput", "4");
+  }
+  // specify model_save_path
+  model_save_path = args.model_path;
+  
+
+  
+  std::sprintf(g_train_path, "%s", args.trainFolder.c_str());
+  std::sprintf(g_test_path, "%s", args.testFolder.c_str());
+  g_model_name = args.modelName;
+  g_phase = args.phase;
+  
+
   relocgui::RelocaliserApplication app(args.calibrationFilename, args.trainFolder, args.testFolder, settings);
-  app.run();
+  // app.run();
+  if(args.phase.compare("train") == 0)
+  {
+    app.train();
+  }
+  else if(args.phase.compare("test") == 0)
+  {
+    app.test();
+  }
+  else if(args.phase.compare("test4rl") == 0)
+  {
+    app.test4rl();
+  }
+  else if(args.phase.compare("test4pcd") == 0)
+  {
+    app.test4pcd();
+  }
+  else
+  {
+    throw std::invalid_argument("phase error.");
+  }
 
   return EXIT_SUCCESS;
 }

@@ -28,6 +28,7 @@ __global__ void ck_compute_colour_features(Vector2i depthSize, Vector2i rgbSize,
     const Vector2i xyDepth = map_pixel_coordinates(xyOut, outSize, depthSize);
     const Vector2i xyRgb = map_pixel_coordinates(xyOut, outSize, rgbSize);
 
+
     // Compute the colour feature for the pixel and write it into the correct place in the pixel's descriptor.
     compute_colour_features<DifferenceType>(
       xyDepth, xyRgb, xyOut, depthSize, rgbSize, outSize, depths, rgb, rgbOffsets, rgbChannels,

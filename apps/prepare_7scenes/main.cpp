@@ -50,7 +50,9 @@ void process_splits(const bf::path &sequencePath,
                     int singleSplitLength,
                     const std::string &depthMask,
                     const std::string &rgbMask,
-                    const std::string &poseMask)
+                    const std::string &poseMask,
+                    const int step,
+                    const int start = 0)
 {
   SequentialPathGenerator outputPathGenerator(outputPath);
 
@@ -61,12 +63,17 @@ void process_splits(const bf::path &sequencePath,
 
     std::cout << "Processing images from: " << splitFolder << '\n';
 
-    for(int i = 0; i < singleSplitLength; ++i)
+    for (int k = 0; k < start; k++) splitPathGenerator.increment_index();
+
+    for(int i = start; i < singleSplitLength;)
     {
       copy_rgbd_pose_frame(splitPathGenerator, outputPathGenerator, depthMask, rgbMask, poseMask);
 
       // Increment indices.
-      splitPathGenerator.increment_index();
+      for (int k = 0; k < step && i < singleSplitLength; k++) {
+        splitPathGenerator.increment_index();
+        ++i;
+      }
       outputPathGenerator.increment_index();
     }
   }
@@ -110,20 +117,22 @@ int main(int argc, char *argv[]) try
   const std::string testingFolderName = "test";
 
   // Dataset-specific informations.
-  std::vector<std::string> sequenceNames = list_of<std::string>()("chess")("fire")("heads")("office")("pumpkin")("redkitchen")("stairs");
+  std::vector<std::string> sequenceNames = list_of<std::string>("chess")("fire")("heads")("office")("pumpkin")("redkitchen")("stairs");
   std::vector<int> sequenceSplitLengths = list_of<int>(1000)(1000)(1000)(1000)(1000)(1000)(500);
 
   std::map<std::string, std::vector<std::string> > trainingSplits;
   std::map<std::string, std::vector<std::string> > testingSplits;
 
   // Chess
-  trainingSplits[sequenceNames[0]].push_back("seq-01");
-  trainingSplits[sequenceNames[0]].push_back("seq-02");
-  trainingSplits[sequenceNames[0]].push_back("seq-04");
-  trainingSplits[sequenceNames[0]].push_back("seq-06");
+  // trainingSplits[sequenceNames[0]].push_back("seq-01");
+  // trainingSplits[sequenceNames[0]].push_back("seq-02");
+  // trainingSplits[sequenceNames[0]].push_back("seq-04");
+  // trainingSplits[sequenceNames[0]].push_back("seq-06");
+  trainingSplits[sequenceNames[0]].push_back("seq-03");
+
 
   testingSplits[sequenceNames[0]].push_back("seq-03");
-  testingSplits[sequenceNames[0]].push_back("seq-05");
+  //testingSplits[sequenceNames[0]].push_back("seq-05");
 
   // Fire
   trainingSplits[sequenceNames[1]].push_back("seq-01");
@@ -184,8 +193,10 @@ int main(int argc, char *argv[]) try
   testingSplits[sequenceNames[6]].push_back("seq-04");
 
   // First of all, check that every folder exists and create training and testing subfolders.
-  for(size_t sequenceIdx = 0; sequenceIdx < sequenceNames.size(); ++sequenceIdx)
+  for(size_t sequenceIdx = 0; sequenceIdx < 1; ++sequenceIdx)
   {
+    std::cout << "current scene:" << sequenceNames[sequenceIdx] << std::endl;
+
     const std::string &sequenceName = sequenceNames[sequenceIdx];
     const bf::path sequenceRoot = datasetRoot / sequenceName;
 
@@ -248,7 +259,7 @@ int main(int argc, char *argv[]) try
   }
 
   // Now prepare each sequence.
-  for(size_t sequenceIdx = 0; sequenceIdx < sequenceNames.size(); ++sequenceIdx)
+  for(size_t sequenceIdx = 0; sequenceIdx < 1; ++sequenceIdx)
   {
     const std::string &sequenceName = sequenceNames[sequenceIdx];
     const bf::path sequenceRoot = datasetRoot / sequenceName;
@@ -263,7 +274,9 @@ int main(int argc, char *argv[]) try
                    sequenceSplitLengths[sequenceIdx],
                    depthFileMask,
                    rgbFileMask,
-                   poseFileMask);
+                   poseFileMask,
+                   100,
+                   50);
 
     // Testing splits.
     const bf::path testingPath = sequenceRoot / testingFolderName;
@@ -275,7 +288,8 @@ int main(int argc, char *argv[]) try
                    sequenceSplitLengths[sequenceIdx],
                    depthFileMask,
                    rgbFileMask,
-                   poseFileMask);
+                   poseFileMask,
+                   1);
   }
 
   return EXIT_SUCCESS;

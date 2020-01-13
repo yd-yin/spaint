@@ -27,7 +27,11 @@ class Relocaliser
   //#################### TYPEDEFS ####################
 protected:
   typedef tvgutil::AverageTimer<boost::chrono::microseconds> AverageTimer;
-
+public:
+  //typedef of valid point cloud
+  typedef std::vector<float> CorrectPointType;
+  typedef std::vector<CorrectPointType> CorrectPointCloud;
+    
   //#################### ENUMERATIONS ####################
 public:
   /**
@@ -104,6 +108,7 @@ public:
    * \return                The results of the relocalisation, from best to worst, or an empty vector otherwise.
    */
   virtual std::vector<Result> relocalise(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics) const = 0;
+  std::vector<Result> relocalise_rel(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, int fid){;};
 
   /**
    * \brief Resets the relocaliser, allowing the integration of information for a new area.
@@ -129,6 +134,18 @@ public:
    */
   virtual void train(const ORUChar4Image *colourImage, const ORFloatImage *depthImage,
                      const Vector4f& depthIntrinsics, const ORUtils::SE3Pose& cameraPose) = 0;
+
+  /**
+  * \brief Get the Correctness point cloud
+  *
+  * \param colourImage     The colour image.
+  * \param depthImage      The depth image.
+  * \param depthIntrinsics The intrinsic parameters of the depth sensor.
+  * \param cameraPose      The pose of the camera.
+  * \param pointCloud      The correct point cloud.
+  * \return                The results of the testpoint process that contains 15channels which means x, y, z, yaw(30 degree) seperately.
+  */
+  virtual void test4pcd(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, const ORUtils::SE3Pose& cameraPose, CorrectPointCloud& pointCloud);
 
   //#################### PUBLIC MEMBER FUNCTIONS ####################
 public:

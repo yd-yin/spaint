@@ -70,6 +70,10 @@ uint32_t ScoreRelocaliser_CUDA::count_valid_depths(const ORFloatImage *depthImag
 
 void ScoreRelocaliser_CUDA::merge_predictions_for_keypoints(const LeafIndicesImage_CPtr& leafIndices, ScorePredictionsImage_Ptr& outputPredictions) const
 {
+  // dsy: ok, executed.
+  //printf("dsy: exe\n");
+  //getchar();
+
   const Vector2i imgSize = leafIndices->noDims;
 
   // Make sure that the output predictions image has the right size (this is a no-op after the first time).

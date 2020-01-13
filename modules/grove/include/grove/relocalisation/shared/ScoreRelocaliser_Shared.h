@@ -93,6 +93,7 @@ inline void merge_predictions_for_keypoint(int x, int y, const ORUtils::VectorX<
     outputPrediction.elts[outputPrediction.size++] = inputPredictions[bestTreeIdx]->elts[currentModeIndices[bestTreeIdx]];
     ++currentModeIndices[bestTreeIdx];
   }
+
 }
 
 }

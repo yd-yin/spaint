@@ -246,6 +246,7 @@ public:
 
   /** Override */
   virtual std::vector<Result> relocalise(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics) const;
+  std::vector<Result> relocalise_rel(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, int fid);
 
   /** Override */
   virtual void reset();
@@ -264,6 +265,9 @@ public:
 
   /** Override */
   virtual void train(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, const ORUtils::SE3Pose& cameraPose);
+
+  /** Override */
+  virtual void test4pcd(const ORUChar4Image *colourImage, const ORFloatImage *depthImage, const Vector4f& depthIntrinsics, const ORUtils::SE3Pose& cameraPose, CorrectPointCloud& pointCloud);
 
   /** Override */
   virtual void update();

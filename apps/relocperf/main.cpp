@@ -496,6 +496,8 @@ void printWidth(const T& item, int width, bool leftAlign = false)
 
 int main(int argc, char *argv[])
 {
+  std::cerr << std::endl << "- - - - - -" << std::endl << std::endl; 
+
   fs::path datasetFolder;
   fs::path relocBaseFolder;
   fs::path statsBaseFolder;
@@ -554,6 +556,10 @@ int main(int argc, char *argv[])
     const fs::path gtPath = datasetFolder / sequence / (useValidation ? validationFolderName : testFolderName);
     const fs::path relocFolder = relocBaseFolder / (relocTag + '_' + sequence);
     const fs::path statsFile = statsBaseFolder / (relocTag + '_' + sequence + ".txt");
+
+    std::cerr << "gtPath " << gtPath << std::endl;
+    std::cerr << "relocFolder " << relocFolder << std::endl;
+    std::cerr << "statsFile " << statsFile << std::endl;
 
     std::cerr << "Processing sequence " << sequence << " in: " << gtPath << "\t - " << relocFolder << std::endl;
     try

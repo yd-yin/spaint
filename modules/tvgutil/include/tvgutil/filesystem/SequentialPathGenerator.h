@@ -62,6 +62,8 @@ public:
    * \return        A path in the base directory that is numbered with the current index in the sequence.
    */
   boost::filesystem::path make_path(const std::string& pattern) const;
+
+  boost::filesystem::path make_path(const std::string& pattern, uint32_t idx, uint32_t i) const;
 };
 
 }

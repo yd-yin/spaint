@@ -55,6 +55,21 @@ void PreemptiveRansac_CPU::generate_pose_candidates()
   const ScorePrediction *predictions = m_predictionsImage->GetData(MEMORYDEVICE_CPU);
   CPURNG *rngs = m_rngs->GetData(MEMORYDEVICE_CPU);
 
+
+
+  /*// dsy
+  const int rasterIdx_max = (imgSize.height - 1) * imgSize.width + (imgSize.width - 1);
+  for (int rasterIdx = 0; rasterIdx < rasterIdx_max; ++rasterIdx)
+  {
+    // todo: filtering.
+
+    const ScorePrediction& prediction = predictions[rasterIdx];
+    printf("dsy: leaf prediction.size = %d\n", prediction.size);
+  }
+  // dsy*/
+
+
+
   // Reset the number of pose candidates.
   m_poseCandidates->dataSize = 0;
 

@@ -29,6 +29,7 @@ DA_RGBDPatchFeatureCalculator_Ptr FeatureCalculatorFactory::make_da_rgbd_patch_f
   const uint32_t rgbFeatureCount = 128;
   const uint32_t rgbFeatureOffset = 128;
 
+
   return make_custom_patch_feature_calculator<Keypoint3DColour,RGBDPatchDescriptor>(
     deviceType, depthAdaptive, differenceType, depthFeatureCount, depthFeatureOffset, depthMinRadius, depthMaxRadius,
     differenceType, rgbFeatureCount, rgbFeatureOffset, rgbMinRadius, rgbMaxRadius
